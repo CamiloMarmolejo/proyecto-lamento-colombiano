@@ -1,0 +1,6 @@
+# Catálogo de audios que ya vienen en el proyecto (carpeta src/main/webapp/media).
+# Formato: codigo;titulo;categoria;indignacion;duracionSeg;descripcion;archivo;autor
+L001;Jueputa nivel 1;Insulto;2;1.32;Insulto tranquilo de todos los días;hp_1.mp3;Anónimo
+L002;Jueputa nivel 2;Insulto;4;1.2;Insulto levemente más enérgico que el nivel 1: mayor tono de voz y el mismo sentimiento;hp_2.mp3;Anónimo
+L003;Jueputa nivel 3;Insulto;8;1.85;Insulto de grado superior: usa la hipérbole "retretre" para denotar una mayor magnitud;hp_3.mp3;Anónimo
+L004;Jueputa nivel 4;Insulto;10;5.3;La cúspide del insulto colombiano: hipérboles en repetidas ocasiones y, en cierto punto, el insulto se multiplica por 1000;hp_4.mp3;Anónimo
