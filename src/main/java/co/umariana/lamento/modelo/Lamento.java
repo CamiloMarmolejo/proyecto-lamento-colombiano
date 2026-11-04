@@ -59,7 +59,9 @@ public class Lamento {
         if (indignacion < 1 || indignacion > 10) {
             throw new IllegalArgumentException("La indignación debe estar entre 1 y 10");
         }
-        // TODO 1: la duración debe ser mayor que 0
+        if (duracionSeg <= 0) {
+            throw new IllegalArgumentException("La duración debe ser mayor que 0");
+        }
     }
 
     private static void textoObligatorio(String valor, String campo) {
@@ -70,8 +72,9 @@ public class Lamento {
     }
 
     private static void sinSeparadores(String valor, String campo) {
-        // TODO 2: lanzar IllegalArgumentException si contiene ';' o saltos de línea (\n
-        // y \r)
+        if (valor.contains(";") || valor.contains("\n") || valor.contains("\r")) {
+            throw new IllegalArgumentException(campo + " no puede contener ';' ni saltos de línea");
+        }
     }
 
     public String getCodigo() {
