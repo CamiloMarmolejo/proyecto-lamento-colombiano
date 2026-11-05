@@ -33,7 +33,7 @@
                             <meta charset="UTF-8">
                             <meta name="viewport" content="width=device-width, initial-scale=1">
                             <title>Registrar lamento · Lamentómetro</title>
-                            <link rel="stylesheet" href="../css/estilos.css">
+                            <link rel="stylesheet" href="css/estilos.css">
                         </head>
 
                         <body class="app">

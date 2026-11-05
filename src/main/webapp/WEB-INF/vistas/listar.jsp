@@ -11,7 +11,7 @@
             %>
             <% // Atributos que pone el servlet ListarLamentos List<?> lamentos = (List
                 <?>) request.getAttribute("lamentos");
-    Map<?, ?> promedios = (Map
+                Map<?, ?> promedios = (Map
                 <?, ?>) request.getAttribute("promedios");
                 boolean ranking = "ranking".equals(request.getParameter("orden"));
                 int cantidad = (lamentos == null) ? 0 : lamentos.size();
@@ -24,7 +24,7 @@
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                     <title>Lamentos · Lamentómetro</title>
-                    <link rel="stylesheet" href="../css/estilos.css">
+                    <link rel="stylesheet" href="css/estilos.css">
                 </head>
 
                 <body class="app">
