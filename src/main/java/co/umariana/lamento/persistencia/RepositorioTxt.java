@@ -3,10 +3,7 @@ package co.umariana.lamento.persistencia;
 import co.umariana.lamento.modelo.Lamento;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,59 +32,13 @@ public class RepositorioTxt implements Repositorio {
 
     @Override
     public List<Lamento> cargar() throws IOException {
-        List<Lamento> lamentos = new ArrayList<>();
-        if (!Files.exists(archivo)) {
-            return lamentos;
-        }
-        for (String linea : Files.readAllLines(archivo, StandardCharsets.UTF_8)) {
-            if (linea.isBlank()) {
-                continue;
-            }
-            Lamento lamento = interpretar(linea);
-            if (lamento != null) {
-                lamentos.add(lamento);
-            }
-        }
-        return lamentos;
+        // TODO (PERSISTENCIA)
+        throw new UnsupportedOperationException("TODO: cargar()");
     }
 
     @Override
     public void guardar(List<Lamento> lamentos) throws IOException {
-        // Con una ruta relativa como "lamentos.txt" no hay carpeta padre: getParent() devuelve null.
-        Path carpeta = archivo.getParent();
-        if (carpeta != null) {
-            Files.createDirectories(carpeta);
-        }
-        List<String> lineas = new ArrayList<>();
-        for (Lamento lamento : lamentos) {
-            lineas.add(aLinea(lamento));
-        }
-        Files.write(archivo, lineas, StandardCharsets.UTF_8);
-    }
-
-    /** Convierte una línea del archivo en un lamento, o devuelve {@code null} si está dañada. */
-    private static Lamento interpretar(String linea) {
-        String[] campos = linea.split(";", -1); // -1 conserva los campos vacíos al final
-        if (campos.length != 7) {
-            return null;
-        }
-        try {
-            return new Lamento(campos[0], campos[1], campos[2], Integer.parseInt(campos[3]),
-                    Double.parseDouble(campos[4]), campos[5], campos[6]);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    /** Escribe un lamento en el formato del archivo. */
-    private static String aLinea(Lamento lamento) {
-        return String.join(";",
-                lamento.getCodigo(),
-                lamento.getTitulo(),
-                lamento.getCategoria(),
-                String.valueOf(lamento.getIndignacion()),
-                String.valueOf(lamento.getDuracionSeg()),
-                lamento.getDescripcion(),
-                lamento.getArchivo());
+        // TODO (PERSISTENCIA)
+        throw new UnsupportedOperationException("TODO: guardar()");
     }
 }
