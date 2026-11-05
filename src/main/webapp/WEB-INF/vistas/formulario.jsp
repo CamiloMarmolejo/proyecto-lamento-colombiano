@@ -5,9 +5,9 @@
         <%! /** Devuelve el parámetro ya "escapado" (para volver a mostrar lo escrito si hubo un error). */ private
             static String valor(javax.servlet.http.HttpServletRequest req, String nombre) { String
             v=req.getParameter(nombre); return (v==null) ? "" : Html.esc(v); } %>
-            <% // Atributo que pone el servlet RegistrarLamento cuando algo falla Object
+            <% /* Atributo que pone el servlet RegistrarLamento cuando algo falla */ Object
                 atributoError=request.getAttribute("error"); String error=(atributoError==null) ? null :
-                atributoError.toString(); // Audios que existen en la carpeta media/ List<String> archivos = new
+                atributoError.toString(); /* Audios que existen en la carpeta media/ */ List<String> archivos = new
                 ArrayList<>();
                     Set<String> rutas = application.getResourcePaths("/media/");
                         if (rutas != null) {
@@ -25,6 +25,14 @@
                         if (indignacion == null || !indignacion.matches("([1-9]|10)")) {
                         indignacion = "5";
                         }
+
+                        /* Valores ya escapados para volver a mostrar lo escrito si hubo un error */
+                        String vCodigo = valor(request, "codigo");
+                        String vCategoria = valor(request, "categoria");
+                        String vTitulo = valor(request, "titulo");
+                        String vArchivo = valor(request, "archivo");
+                        String vDuracion = valor(request, "duracion");
+                        String vDescripcion = valor(request, "descripcion");
                         %>
                         <!DOCTYPE html>
                         <html lang="es">
@@ -33,7 +41,7 @@
                             <meta charset="UTF-8">
                             <meta name="viewport" content="width=device-width, initial-scale=1">
                             <title>Registrar lamento · Lamentómetro</title>
-                            <link rel="stylesheet" href="../css/estilos.css">
+                            <link rel="stylesheet" href="css/estilos.css">
                         </head>
 
                         <body class="app">
@@ -69,16 +77,15 @@
                                                 <div class="campo">
                                                     <label for="codigo">Código *</label>
                                                     <input type="text" id="codigo" name="codigo" required maxlength="20"
-                                                        pattern="[^;]+" placeholder="Ej. L005"
-                                                        value="<%= valor(request, " codigo") %>" autocomplete="off">
+                                                        pattern="[^;]+" placeholder="Ej. L005" value="<%= vCodigo %>"
+                                                        autocomplete="off">
                                                     <small>Único para cada lamento.</small>
                                                 </div>
                                                 <div class="campo">
                                                     <label for="categoria">Categoría *</label>
                                                     <input type="text" id="categoria" name="categoria" required
                                                         maxlength="40" pattern="[^;]+" list="categorias"
-                                                        placeholder="Ej. Insulto" value="<%= valor(request, "
-                                                        categoria") %>">
+                                                        placeholder="Ej. Insulto" value="<%= vCategoria %>">
                                                     <datalist id="categorias">
                                                         <option value="Insulto"></option>
                                                         <option value="Queja"></option>
@@ -92,23 +99,23 @@
                                                 <label for="titulo">Título *</label>
                                                 <input type="text" id="titulo" name="titulo" required maxlength="80"
                                                     pattern="[^;]+" placeholder="Ej. Jueputa nivel 5"
-                                                    value="<%= valor(request, " titulo") %>">
+                                                    value="<%= vTitulo %>">
                                             </div>
 
                                             <div class="campo">
                                                 <label for="archivo">Archivo de audio *</label>
                                                 <% if (archivos.isEmpty()) { %>
                                                     <input type="text" id="archivo" name="archivo" required
-                                                        placeholder="Ej. hp_1.mp3" value="<%= valor(request, " archivo")
-                                                        %>">
+                                                        placeholder="Ej. hp_1.mp3" value="<%= vArchivo %>">
                                                     <small>Nombre de un archivo de la carpeta
                                                         <code>media/</code>.</small>
                                                     <% } else { %>
                                                         <select id="archivo" name="archivo" required>
                                                             <option value="">Elija un audio…</option>
-                                                            <% for (String a : archivos) { %>
-                                                                <option value="<%= Html.esc(a) %>"
-                                                                    <%=a.equals(archivoElegido) ? " selected" : "" %>>
+                                                            <% for (String a : archivos) { String
+                                                                marcaSeleccion=a.equals(archivoElegido) ? " selected"
+                                                                : "" ; %>
+                                                                <option value="<%= Html.esc(a) %>" <%=marcaSeleccion %>>
                                                                     <%= Html.esc(a) %>
                                                                 </option>
                                                                 <% } %>
@@ -135,8 +142,7 @@
                                                     <label for="duracion">Duración (segundos) *</label>
                                                     <input type="number" id="duracion" name="duracion" required
                                                         min="0.01" step="0.01" inputmode="decimal"
-                                                        placeholder="Ej. 1.32" value="<%= valor(request, " duracion")
-                                                        %>">
+                                                        placeholder="Ej. 1.32" value="<%= vDuracion %>">
                                                     <small>Se completa sola al elegir el audio.</small>
                                                 </div>
                                             </div>
@@ -144,7 +150,7 @@
                                             <div class="campo">
                                                 <label for="descripcion">Descripción</label>
                                                 <textarea id="descripcion" name="descripcion" maxlength="300"
-                                                    placeholder="Cuente en qué situación se usa este lamento (opcional)"><%= valor(request, "descripcion") %></textarea>
+                                                    placeholder="Cuente en qué situación se usa este lamento (opcional)"><%= vDescripcion %></textarea>
                                                 <small>Sin punto y coma (;) ni saltos de línea.</small>
                                             </div>
 

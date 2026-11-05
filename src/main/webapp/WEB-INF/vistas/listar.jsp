@@ -9,13 +9,19 @@
             return "bajo";
             }
             %>
-            <% // Atributos que pone el servlet ListarLamentos List<?> lamentos = (List
+            <% /* Atributos que pone el servlet ListarLamentos */ List<?> lamentos = (List
                 <?>) request.getAttribute("lamentos");
     Map<?, ?> promedios = (Map
                 <?, ?>) request.getAttribute("promedios");
                 boolean ranking = "ranking".equals(request.getParameter("orden"));
                 int cantidad = (lamentos == null) ? 0 : lamentos.size();
                 String[] medallas = {"🥇", "🥈", "🥉"};
+
+                /* Textos calculados aquí para que el HTML de abajo no lleve comillas dentro de los atributos */
+                String textoCantidad = (cantidad == 1) ? "lamento guardado" : "lamentos guardados";
+                String subtituloTabla = ranking ? " ordenada por indignación" : "";
+                String ariaOrden = ranking ? "" : "aria-current=\"true\"";
+                String ariaRanking = ranking ? "aria-current=\"true\"" : "";
                 %>
                 <!DOCTYPE html>
                 <html lang="es">
@@ -24,7 +30,7 @@
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                     <title>Lamentos · Lamentómetro</title>
-                    <link rel="stylesheet" href="../css/estilos.css">
+                    <link rel="stylesheet" href="css/estilos.css">
                 </head>
 
                 <body class="app">
@@ -47,7 +53,7 @@
                                 <h1>Lamentos</h1>
                                 <p>
                                     <%= cantidad %>
-                                        <%= cantidad==1 ? "lamento guardado" : "lamentos guardados" %>
+                                        <%= textoCantidad %>
                                 </p>
                             </div>
                             <div class="acciones">
@@ -57,8 +63,8 @@
                         </div>
 
                         <nav class="pestanas" aria-label="Orden de la lista">
-                            <a href="listar" <%=ranking ? "" : "aria-current=\" true\"" %>>Orden de la lista</a>
-                            <a href="listar?orden=ranking" <%=ranking ? "aria-current=\" true\"" : "" %>>🏆 Ranking</a>
+                            <a href="listar" <%=ariaOrden %>>Orden de la lista</a>
+                            <a href="listar?orden=ranking" <%=ariaRanking %>>🏆 Ranking</a>
                         </nav>
 
                         <% if (cantidad==0) { %>
@@ -74,8 +80,7 @@
                             <% } else { %>
                                 <div class="tabla-envoltura">
                                     <table class="tabla">
-                                        <caption class="solo-lector">Lista de lamentos<%= ranking
-                                                ? " ordenada por indignación" : "" %>
+                                        <caption class="solo-lector">Lista de lamentos<%= subtituloTabla %>
                                         </caption>
                                         <thead>
                                             <tr>
@@ -92,12 +97,13 @@
                                         </thead>
                                         <tbody>
                                             <% int puesto=0; for (Object o : lamentos) { Lamento l=(Lamento) o;
-                                                puesto++; int nivel=l.getIndignacion(); %>
+                                                puesto++; int nivel=l.getIndignacion(); String marcaPuesto=(puesto <=3)
+                                                ? medallas[puesto - 1] : String.valueOf(puesto); String
+                                                textoDuracion=String.format(ES, "%.2f" , l.getDuracionSeg()); %>
                                                 <tr>
                                                     <% if (ranking) { %>
                                                         <td class="puesto" data-etiqueta="Puesto">
-                                                            <%= puesto <=3 ? medallas[puesto - 1] :
-                                                                String.valueOf(puesto) %>
+                                                            <%= marcaPuesto %>
                                                         </td>
                                                         <% } %>
                                                             <td data-etiqueta="Código">
@@ -122,7 +128,7 @@
                                                                 </div>
                                                             </td>
                                                             <td data-etiqueta="Duración">
-                                                                <%= String.format(ES, "%.2f" , l.getDuracionSeg()) %> s
+                                                                <%= textoDuracion %> s
                                                             </td>
                                                             <td data-etiqueta="Acción">
                                                                 <form method="post" action="eliminar"
@@ -148,17 +154,17 @@
                                             <div class="promedios">
                                                 <% for (Map.Entry<?, ?> e : promedios.entrySet()) {
                                                     double valor = ((Number) e.getValue()).doubleValue();
+                                                    String textoPromedio = String.format(ES, "%.1f", valor);
                                                     %>
                                                     <article class="tarjeta">
                                                         <p class="promedio__categoria">
                                                             <%= Html.esc(String.valueOf(e.getKey())) %>
                                                         </p>
                                                         <p class="promedio__valor">
-                                                            <%= String.format(ES, "%.1f" , valor) %> <small>/ 10</small>
+                                                            <%= textoPromedio %> <small>/ 10</small>
                                                         </p>
                                                         <div class="medidor medidor--<%= clasificar(valor) %>"
-                                                            role="img" aria-label="Promedio <%= String.format(ES, "
-                                                            %.1f", valor) %> de 10">
+                                                            role="img" aria-label="Promedio <%= textoPromedio %> de 10">
                                                             <span class="medidor__pista"><span class="medidor__barra"
                                                                     style="--nivel:<%= Math.round(valor * 10) %>%"></span></span>
                                                         </div>

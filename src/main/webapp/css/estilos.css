@@ -763,3 +763,12 @@ body:not(.app) > main li small {
     transition: none !important;
   }
 }
+.marca {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.pestanas a,
+.boton--chico {
+  min-height: 44px;
+}

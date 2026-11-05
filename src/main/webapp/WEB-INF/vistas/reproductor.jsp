@@ -13,18 +13,20 @@
             return URLEncoder.encode(archivo, java.nio.charset.StandardCharsets.UTF_8).replace("+", "%20");
             }
             %>
-            <% // Atributos que pone el servlet Reproductor (el lamento puede ser null) Lamento lamento=(Lamento)
+            <% /* Atributos que pone el servlet Reproductor (el lamento puede ser null) */ Lamento lamento=(Lamento)
                 request.getAttribute("lamento"); Object atributoTotal=request.getAttribute("total"); int
-                total=(atributoTotal instanceof Number) ? ((Number) atributoTotal).intValue() : 0; %>
+                total=(atributoTotal instanceof Number) ? ((Number) atributoTotal).intValue() : 0; String
+                textoTotal=total + ((total==1) ? " lamento" : " lamentos" ) + " en la lista" ; String textoDuracion="" ;
+                String rutaAudio="" ; if (lamento !=null) { textoDuracion=String.format(ES, "%.2f" ,
+                lamento.getDuracionSeg()); rutaAudio="media/" + urlArchivo(lamento.getArchivo()); } %>
                 <!DOCTYPE html>
                 <html lang="es">
-
 
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                     <title>Reproductor · Lamentómetro</title>
-                    <link rel="stylesheet" href="../css/estilos.css">
+                    <link rel="stylesheet" href="css/estilos.css">
                 </head>
 
                 <body class="app">
@@ -73,7 +75,7 @@
                                             </span>
                                         </div>
                                         <span>
-                                            <%= String.format(ES, "%.2f" , lamento.getDuracionSeg()) %> s
+                                            <%= textoDuracion %> s
                                         </span>
                                     </div>
                                     <% String descripcion=lamento.getDescripcion(); %>
@@ -83,8 +85,7 @@
                                             </p>
                                             <% } %>
 
-                                                <audio id="audio" controls preload="auto"
-                                                    src="media/<%= urlArchivo(lamento.getArchivo()) %>">
+                                                <audio id="audio" controls preload="auto" src="<%= rutaAudio %>">
                                                     Su navegador no soporta el elemento de audio.
                                                 </audio>
 
@@ -97,8 +98,7 @@
 
                                                 <div class="reproductor__pie">
                                                     <span>
-                                                        <%= Html.esc(lamento.getCodigo()) %> · <%= total %>
-                                                                <%= total==1 ? "lamento" : "lamentos" %> en la lista
+                                                        <%= Html.esc(lamento.getCodigo()) %> · <%= textoTotal %>
                                                     </span>
                                                     <label><input type="checkbox" id="seguir" checked> Pasar solo al
                                                         siguiente</label>
@@ -112,7 +112,7 @@
                     <% if (lamento !=null) { %>
                         <script>
                             (function () {
-                                var TOTAL = parseInt('<%= total %>', 10) || 0;
+                                var TOTAL = <%= total %>;
                                 var CLAVE = 'lamentometro.seguir';
                                 var audio = document.getElementById('audio');
                                 var seguir = document.getElementById('seguir');
